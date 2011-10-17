@@ -32,6 +32,22 @@ class Message extends MessagesAppModel {
 		)
 	);
 	
+	var $hasMany = array(
+		'Used' => array(
+			'className' => 'Users.Used',
+			'foreignKey' => 'foreign_key',
+			'dependent' => true,
+			'conditions' => array('Used.model' => 'Message'),
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+	);
+	
 	var $hasAndBelongsToMany = array(
 		'User' => array(
 			'className' => 'Users.User',
