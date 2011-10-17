@@ -2,7 +2,17 @@
 class Message extends MessagesAppModel {
 	var $name = 'Message';
 	var $displayField = 'title';
-	var $actsAs = array('Tree', 'Users.Usable', 'Activities.Loggable' => array('nameField' => 'title', 'descriptionField' => 'body', 'actionDescription' => 'Posted by', 'userField' => 'sender_id', 'parentForeignKey' => 'foreign_key'));
+	var $actsAs = array(
+		'Tree', 
+		'Users.Usable', 
+		'Activities.Loggable' => array(
+			'nameField' => 'title', 
+			'descriptionField' => 'body', 
+			'actionDescription' => 'Posted by', 
+			'userField' => 'sender_id', 
+			'parentForeignKey' => 'foreign_key'
+			)
+		);
 	var $fullName = "Messages.Message"; //for the sake of comments plugin
 	
 	var $belongsTo = array(
@@ -42,7 +52,8 @@ class Message extends MessagesAppModel {
 	
 	function __construct($id = false, $table = null, $ds = null) {
     	parent::__construct($id, $table, $ds);
-	    $this->virtualFields['subject'] = sprintf('CONCAT(%s.title, " <small>from ", Sender.full_name, "</small>")', $this->alias);
+	   # $this->virtualFields['subject'] = sprintf('CONCAT(%s.title, " <small>from ", Sender.full_name, "</small>")', $this->alias);
+	    $this->virtualFields['subject'] = sprintf('CONCAT(%s.title)', $this->alias);
     }
 	
 	function boxes() {
