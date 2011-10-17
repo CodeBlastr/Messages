@@ -12,11 +12,11 @@
 
 <table>
   <tr>
-    <th><?php echo $paginator->sort(isset($messages[0]['Sender'])? 'From' : 'To',
+    <th><?php echo $this->Paginator->sort(isset($messages[0]['Sender'])? 'From' : 'To',
 	    	$model.'.username' )?></th>
-    <th><?php echo $paginator->sort('Subject', 'Message.title')?></th>
-    <th><?php echo $paginator->sort('Time', 'Message.created');?></th>
-    <th><?php echo $paginator->sort('Status', 'Message.read');?></th>
+    <th><?php echo $this->Paginator->sort('Subject', 'Message.title')?></th>
+    <th><?php echo $this->Paginator->sort('Time', 'Message.created');?></th>
+    <th><?php echo $this->Paginator->sort('Status', 'Message.read');?></th>
     <th>Actions</th>
   </tr>
   <?php foreach($messages as $m):?>
