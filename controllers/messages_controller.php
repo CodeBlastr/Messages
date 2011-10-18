@@ -84,26 +84,26 @@ class MessagesController extends MessagesAppController {
 	 * @return void
 	 */
 	function add($to = null) {
-		if (!empty($this->data)) {
+		if (!empty($this->request->data)) {
 			# find the users from the habtm users array
-			if (!empty($this->data['User']['User'])) : 
+			if (!empty($this->request->data['User']['User'])) : 
 				$recipients = $this->Message->Recipient->find('all', array(
 					'conditions' => array(
-						'Recipient.id' => $this->data['User']['User'],
+						'Recipient.id' => $this->request->data['User']['User'],
 						),
 					));
 			endif;
 			
 			# add the sender into the users array so that they receive comments and/or view the message at all
-			$this->data['User']['User'][] = $this->data['Message']['sender_id'];
+			$this->request->data['User']['User'][] = $this->request->data['Message']['sender_id'];
 			
-			if ($this->Message->save($this->data)) :
+			if ($this->Message->save($this->request->data)) :
 				# send the message via email
 				if (!empty($recipients)) : foreach ($recipients as $recipient) :
-					$viewUrl = str_replace('{messageId}', $this->Message->id, 'http://'.$_SERVER['HTTP_HOST'].$this->data['Message']['viewPath']);
-					$message = $this->data['Message']['body'];
+					$viewUrl = str_replace('{messageId}', $this->Message->id, 'http://'.$_SERVER['HTTP_HOST'].$this->request->data['Message']['viewPath']);
+					$message = $this->request->data['Message']['body'];
 					$message .= '<p>You can reply to this message here: <a href="'.$viewUrl.'">'.$viewUrl.'</a></p>';
-					$this->__sendMail($recipient['Recipient']['email'], $this->data['Message']['title'], $message, $template = 'default');
+					$this->__sendMail($recipient['Recipient']['email'], $this->request->data['Message']['title'], $message, $template = 'default');
 				endforeach; endif;
 				
 				$this->Session->setFlash(__('The message has been sent', true));
@@ -121,16 +121,16 @@ class MessagesController extends MessagesAppController {
 	 */
 	function _sendMessage() {
 		$this->Message->create();
-		if ($this->Message->save($this->data)) :
+		if ($this->Message->save($this->request->data)) :
 			$url =   Router::url(array(
 				'plugin'=>'messages',
 				'controller'=>'messages',
 				'action'=>'view', $this->Message->id), true);
 			$msg = 'Hi,<br> You have received a messae from '.$this->Auth->user('username');
-			$msg .= "<br><br>" . $this->data['Message']['body'];
+			$msg .= "<br><br>" . $this->request->data['Message']['body'];
 			$msg .= "<br><br> <a href = '{$url}'>Click here to reply/view the message.</a>" ;
 			echo $this->__sendMail(array($to['Recipient']['email'] => $to['Recipient']['username']),
-			$this->data['Message']['title'],
+			$this->request->data['Message']['title'],
 				$msg );
 			return true;
 		else :
@@ -181,20 +181,20 @@ class MessagesController extends MessagesAppController {
 	
 	
 	function edit($id = null) {
-		if (!$id && empty($this->data)) {
+		if (!$id && empty($this->request->data)) {
 			$this->Session->setFlash(__('Invalid message', true));
 			$this->redirect(array('action' => 'index'));
 		}
-		if (!empty($this->data)) {
-			if ($this->Message->save($this->data)) {
+		if (!empty($this->request->data)) {
+			if ($this->Message->save($this->request->data)) {
 				$this->Session->setFlash(__('The message has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The message could not be saved. Please, try again.', true));
 			}
 		}
-		if (empty($this->data)) {
-			$this->data = $this->Message->read(null, $id);
+		if (empty($this->request->data)) {
+			$this->request->data = $this->Message->read(null, $id);
 		}
 	}
 
