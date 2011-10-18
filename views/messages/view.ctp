@@ -4,13 +4,13 @@
       <div class="viewRow">
         <ul class="metaData">
           <li><span class="metaDataLabel">
-            <?php __('Subject: '); ?>
+            <?php echo __('Subject: '); ?>
             </span><span class="metaDataDetail"><?php echo $message['Message']['title']; ?></span></li>
           <li><span class="metaDataLabel">
-            <?php __('From: '); ?>
+            <?php echo __('From: '); ?>
             </span><span class="metaDataDetail"><?php echo $message['Sender']['username']; ?></span></li>
           <li><span class="metaDataLabel">
-            <?php __('To: '); ?>
+            <?php echo __('To: '); ?>
             </span>
             <?php if(!empty($message['Recipient'])) : foreach ($message['Recipient'] as $recipient) : ?>
             <span class="metaDataDetail"><?php echo $recipient.', '; ?></span>
