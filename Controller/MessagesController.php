@@ -4,8 +4,8 @@ class MessagesController extends MessagesAppController {
 	var $name = 'Messages';
 	var $components = array('Comments.Comments' => array('userModelClass' => 'Users.User'));
 	
-	function __construct() {
-    	parent::__construct();
+	public function __construct($request = null, $response = null) {
+		parent::__construct($request, $response);
 		$this->set('displayName', 'subject');
 		$this->set('displayDescription', 'body'); 
 		$this->set('showGallery', true); 
@@ -13,9 +13,8 @@ class MessagesController extends MessagesAppController {
 		$this->set('galleryForeignKey', 'id'); 
 	}
 	
-	function beforeFilter() {
+	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->passedArgs['comment_view_type'] = 'threaded';
 	}
 
 	/*
