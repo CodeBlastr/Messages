@@ -4,7 +4,9 @@ class Message extends MessagesAppModel {
 	var $displayField = 'title';
 	var $actsAs = array(
 		'Tree', 
-		'Users.Usable', 
+		'Users.Usable' => array(
+			'defaultRole' => 'reader'
+			), 
 		'Activities.Loggable' => array(
 			'nameField' => 'title', 
 			'descriptionField' => 'body', 
@@ -23,13 +25,6 @@ class Message extends MessagesAppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Recipient' => array(
-			'className' => 'Users.User',
-			'foreignKey' => 'recipient_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
 	);
 	
 	var $hasMany = array(
@@ -50,6 +45,21 @@ class Message extends MessagesAppModel {
 	
 	var $hasAndBelongsToMany = array(
 		'User' => array(
+			'className' => 'Users.User',
+			'joinTable' => 'used',
+			'foreignKey' => 'foreign_key',
+			'associationForeignKey' => 'user_id',
+			'unique' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
+		),
+		'Recipient' => array(
 			'className' => 'Users.User',
 			'joinTable' => 'used',
 			'foreignKey' => 'foreign_key',

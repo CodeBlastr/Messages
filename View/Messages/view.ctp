@@ -29,8 +29,8 @@
 </div>
 <a name="comments"></a>
 <div id="post-comments">
-	<?php $commentWidget->options(array('allowAnonymousComment' => false));?>
-	<?php echo $commentWidget->display();?>
+	<?php $this->CommentWidget->options(array('allowAnonymousComment' => false));?>
+	<?php echo $this->CommentWidget->display();?>
 </div>
 
 

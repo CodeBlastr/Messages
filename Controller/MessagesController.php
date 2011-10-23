@@ -13,8 +13,9 @@ class MessagesController extends MessagesAppController {
 		$this->set('galleryForeignKey', 'id'); 
 	}
 	
-	public function beforeFilter() {
+	function beforeFilter() {
 		parent::beforeFilter();
+		$this->passedArgs['comment_view_type'] = 'threaded';
 	}
 
 	/*
@@ -81,6 +82,7 @@ class MessagesController extends MessagesAppController {
 	 * Sends a message to the specified user
 	 * @param {char} to : username of the receiver
 	 * @return void
+	 * @return move this Usable Behavior related stuff to the model.
 	 */
 	function add($to = null) {
 		if (!empty($this->request->data)) {
@@ -95,7 +97,7 @@ class MessagesController extends MessagesAppController {
 			
 			# add the sender into the users array so that they receive comments and/or view the message at all
 			$this->request->data['User']['User'][] = $this->request->data['Message']['sender_id'];
-			
+			$this->request->data['User']['User'] = array_unique($this->request->data['User']['User']);
 			if ($this->Message->save($this->request->data)) :
 				# send the message via email
 				if (!empty($recipients)) : foreach ($recipients as $recipient) :
