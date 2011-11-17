@@ -107,7 +107,7 @@ class MessagesController extends MessagesAppController {
 					$this->__sendMail($recipient['Recipient']['email'], $this->request->data['Message']['title'], $message, $template = 'default');
 				endforeach; endif;
 				
-				$this->Session->setFlash(__('The message has been sent', true));
+				$this->Session->setFlash(__('Message saved.', true));
 				$this->redirect(array('action' => 'index'), 'success');
 			else :
 				$this->Session->setFlash(__('The message could not be saved. Please, try again.', true), 'error');
