@@ -1,8 +1,9 @@
 <?php
 class MessagesController extends MessagesAppController {
 
-	var $name = 'Messages';
-	var $components = array('Comments.Comments' => array('userModelClass' => 'Users.User'));
+	public $name = 'Messages';
+	public $uses = 'Messages.Message';
+	public $components = array('Comments.Comments' => array('userModelClass' => 'Users.User'));
 	
 	public function __construct($request = null, $response = null) {
 		parent::__construct($request, $response);
