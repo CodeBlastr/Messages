@@ -1,4 +1,10 @@
-<?php echo $this->Element('scaffolds/index', array('data' => $messages)); ?>
+<?php
+echo $this->Element('scaffolds/index', array(
+	'data' => $messages,
+	'actions' => array(
+		$this->Html->link('Read', array('action' => 'read', '{id}'))
+		),
+	)); ?>
 
 
 
