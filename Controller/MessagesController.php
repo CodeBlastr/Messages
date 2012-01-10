@@ -13,6 +13,7 @@ class MessagesController extends MessagesAppController {
 		$this->set('showGallery', true); 
 		$this->set('galleryModel', array('alias' => 'Sender', 'name' => 'User')); 
 		$this->set('galleryForeignKey', 'id'); 
+		$this->set('link', array('pluginName' => 'messages', 'controllerName' => 'messages', 'actionName' => 'read'));
 	}
 	
 	public function beforeFilter() {
@@ -25,46 +26,47 @@ class MessagesController extends MessagesAppController {
  * @param {int} uid ->the id of the user 
  * @param {int} received -> do you want to view the received messages
  */
-	public function inbox ($box = 'Inbox', $foreignKey = null) {
+	public function index($box = 'Inbox', $foreignKey = null) {
 		$user_id = $this->Auth->user('id');
 		switch ($box){
 			case 'Inbox':
 				$options = array(
-					'conditions'=>array('Message.recipient_id'=>$user_id,'Message.is_archived <>'=>1),
-					'contain'=>array('Sender'));
+					'conditions' => array('Message.is_archived <>' => 1),
+					'contain' => array('Sender'));
 				break;
 			case 'Archived':
 				$options = array(
-					'conditions'=>array('Message.recipient_id'=>$user_id,'Message.is_archived'=>1),
-					'contain'=>array('Sender'));
+					'conditions' => array('Message.is_archived' => 1),
+					'contain' => array('Sender'));
 				break;
 			case 'Sent':
 				$options = array(
-					'conditions'=>array('Message.sender_id'=>$user_id,'Message.is_archived <>'=>1),
-					'contain'=>array('Recipient'));
+					'conditions' => array('Message.sender_id' => $user_id,'Message.is_archived <>' => 1),
+					'contain' => array('Recipient'));
 				break;
 			default : 
 				$options = array(
-					'conditions'=>array('Message.foreign_key'=>$foreignKey),
-					'contain'=>array('Recipient', 'Sender' => array('fields' => array('full_name'))));
+					'conditions' => array('Message.foreign_key' => $foreignKey),
+					'contain' => array('Recipient', 'Sender' => array('fields' => array('full_name'))));
 				break;
 			};
 			
-			$options['fields'] = array('id', 'subject', 'created', 'body');
+			$options['fields'] = array('id', 'subject', 'created', 'body', 'readers');
 			
 			$options = am($options, array('order' => array('Message.created'=>'ASC')));
 			$this->paginate = $options;
+			$messages = ZuhaSet::remove($this->paginate(), 'readers');
 			// set the messages which came to the given user
-			$this->set('messages' , $this->paginate());
+			$this->set(compact('messages'));
 			$this->set('boxes', $this->Message->boxes());
 			$this->set('currentBox' , $box);
 	}
-	
+
 
 	public function read($id = null) {
 		if (empty($id)) {
 			$this->Session->setFlash(__('Invalid message', true));
-			$this->redirect(array('action' => 'inbox'));
+			$this->redirect(array('action' => 'index'));
 		}
 		$this->Message->recursive = 1;
 		$message = $this->Message->read(null, $id);
@@ -74,7 +76,7 @@ class MessagesController extends MessagesAppController {
 			$this->set(compact('message'));
 		} else {
 			$this->Session->setFlash(__('The message could not be saved. Please, try again.', true));
-			$this->redirect(array('action' => 'inbox'));
+			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('boxes', $this->Message->boxes());
 	}
@@ -110,7 +112,7 @@ class MessagesController extends MessagesAppController {
 				endforeach; endif;
 				
 				$this->Session->setFlash(__('Message saved.'));
-				$this->redirect(array('action' => 'inbox'), 'success');
+				$this->redirect(array('action' => 'index'), 'success');
 			else :
 				$this->Session->setFlash(__('The message could not be saved. Please, try again.', true), 'error');
 			endif;	
@@ -187,19 +189,19 @@ class MessagesController extends MessagesAppController {
 			$this->Session->setFlash(__('The message could not be saved. Please, try again.', true));
 		}
 		
-		$this->redirect(array('action' => 'inbox'));
+		$this->redirect(array('action' => 'index'));
 	}
 	
 	
 	public function edit($id = null) {
 		if (!$id && empty($this->request->data)) {
 			$this->Session->setFlash(__('Invalid message', true));
-			$this->redirect(array('action' => 'inbox'));
+			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->request->data)) {
 			if ($this->Message->save($this->request->data)) {
 				$this->Session->setFlash(__('The message has been saved', true));
-				$this->redirect(array('action' => 'inbox'));
+				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The message could not be saved. Please, try again.', true));
 			}
@@ -212,11 +214,11 @@ class MessagesController extends MessagesAppController {
 	public function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for message', true));
-			$this->redirect(array('action' => 'inbox'));
+			$this->redirect(array('action' => 'index'));
 		}
 		if ($this->Message->delete($id)) {
 			$this->Session->setFlash(__('User message deleted', true));
-			$this->redirect(array('action' => 'inbox'));
+			$this->redirect(array('action' => 'index'));
 		}
 		$this->Session->setFlash(__('User message was not deleted', true));
 		$this->redirect($this->referer());
