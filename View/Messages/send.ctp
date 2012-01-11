@@ -8,7 +8,8 @@
 	  echo $this->Form->input('User', array('multiple' => 'checkbox', 'label' => 'Recipients'));
 	  
 	  echo $this->Form->hidden('Message.sender_id', array('value' => $this->Session->read('Auth.User.id')));
-	  echo $this->Form->input('Message.model', array('type' => 'hidden', 'value' => 'Message'));
+	  echo $this->Form->hidden('Message.model', array('value' => 'Message'));
+	  echo $this->Form->hidden('Message.viewPath', array('value' => '/messages/messages/read/{messageId}'));
 	  echo $this->Form->end(__('Send', true)); ?>
     </fieldset>
   </div>

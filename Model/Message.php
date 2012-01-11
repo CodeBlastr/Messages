@@ -1,19 +1,15 @@
 <?php
 class Message extends MessagesAppModel {
+	
 	public $name = 'Message';
+	
 	public $displayField = 'title';
+	
 	public $actsAs = array(
 		'Tree', 
 		'Users.Usable' => array(
 			'defaultRole' => 'reader'
 			), 
-		'Activities.Loggable' => array(
-			'nameField' => 'title', 
-			'descriptionField' => 'body', 
-			'actionDescription' => 'Posted by', 
-			'userField' => 'sender_id', 
-			'parentForeignKey' => 'foreign_key'
-			)
 		);
 	public $fullName = "Messages.Message"; //for the sake of comments plugin
 	
@@ -76,9 +72,20 @@ class Message extends MessagesAppModel {
 		),
 	);
 	
+	
 	public function __construct($id = false, $table = null, $ds = null) {
     	parent::__construct($id, $table, $ds);
 	    $this->virtualFields['subject'] = sprintf('CONCAT(%s.title)', $this->alias);
+		
+		if (in_array('Activities', CakePlugin::loaded())) {
+			$this->actsAs['Activities.Loggable'] = array(
+				'nameField' => 'title', 
+				'descriptionField' => 'body', 
+				'actionDescription' => 'Posted by', 
+				'userField' => 'sender_id', 
+				'parentForeignKey' => 'foreign_key'
+				);
+		}
     }
 	
 	
@@ -124,23 +131,57 @@ class Message extends MessagesAppModel {
 	
 	
 /**
+ * Mark a message as read
+ * 
+ * @param {int} 	The user id who has read the message.
+ */
+	public function unReadMessage($data) {
+		if (!empty($data['Message']['unreader_id'])) {
+			if ($this->save($data)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+	
+	
+/**
  * Fix up the data so that its ready for saving.
  *
  * @param {array}
  */
 	private function _cleanData($data) {
+		
+		# add a reader to the serialized readers field
 		if (!empty($data['Message']['readers']) && !empty($data['Message']['reader_id'])) {
 			$readers = unserialize($data['Message']['readers']);
 			if (in_array($data['Message']['reader_id'], $readers)) {
 				# do nothing the reader is already there
 			} else {
-				# add a reader to the serialized array
 				$readers[] = $data['Message']['reader_id'];
 				$data['Message']['readers'] = serialize($readers);
 			}
 		} else if (!empty($data['Message']['reader_id'])) {
 			$data['Message']['readers'] = serialize(array($data['Message']['reader_id']));
 		}
+		
+		
+		# remove a reader from the serialized readers field
+		if (!empty($data['Message']['readers']) && !empty($data['Message']['unreader_id'])) {
+			$readers = unserialize($data['Message']['readers']);
+			if (in_array($data['Message']['unreader_id'], $readers)) {
+				$readers = array_diff($readers, array($data['Message']['unreader_id']));				
+				$data['Message']['readers'] = !empty($readers) ? serialize(array_values($readers)) : null;
+			} else {
+				# do nothing the reader isn't there
+			}
+		} else if (!empty($data['Message']['unreader_id'])) {
+			$data['Message']['readers'] = null;
+		}
+		
 		return $data;
 	}
 	
