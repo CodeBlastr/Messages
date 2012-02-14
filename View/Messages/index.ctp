@@ -1,7 +1,7 @@
 <?php
 echo __('<h2>%s Messages</h2>', $currentBox); 
 
-if (!empty($readMessages)) {
+if (!empty($messages)) {
 	echo '<h3 class="title">Unread Messages</h2>';
 	echo $this->Element('scaffolds/index', array(
 		'data' => $messages,
@@ -25,4 +25,16 @@ if (!empty($readMessages)) {
 		));
 }
 
-echo $this->element('context_menu');
+
+// set the contextual menu items
+$this->set('context_menu', array('menus' => array(
+	array(
+		'heading' => 'Messages',
+		'items' => array(
+			$this->Html->link(__('Inbox'), array('action' => 'index', 'Inbox')),
+			$this->Html->link(__('Sent'), array('action' => 'index', 'Sent')),
+			$this->Html->link(__('Archived'), array('action' => 'index', 'Archived')),
+			)
+		),
+	)));
+echo $this->element('context_menu'); ?>

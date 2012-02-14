@@ -23,5 +23,4 @@ $this->set('context_menu', array('menus' => array(
 			$this->Html->link(__('List User Messages', true), array('action' => 'index')),
 			)
 		),
-	)));
-?>
+	))); ?>s
