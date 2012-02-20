@@ -74,29 +74,7 @@ class MessagesController extends MessagesAppController {
 		$this->set(compact('messages', 'readMessages'));
 		$this->set('boxes', $this->Message->boxes());
 		$this->set('currentBox' , $box);
-		$this->set('pageActions', array(
-			array(
-				'linkText' => 'Inbox',
-				'linkUrl' => array(
-					'action' => 'index',
-					'Inbox',
-					),
-				),
-			array(
-				'linkText' => 'Sent',
-				'linkUrl' => array(
-					'action' => 'index',
-					'Sent',
-					),
-				),
-			array(
-				'linkText' => 'Archived',
-				'linkUrl' => array(
-					'action' => 'index',
-					'Archived',
-					),
-				),
-			));
+		$this->set('pageActions', false);
 	}
 	
 	
