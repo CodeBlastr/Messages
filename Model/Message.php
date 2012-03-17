@@ -74,8 +74,6 @@ class Message extends MessagesAppModel {
 	
 	
 	public function __construct($id = false, $table = null, $ds = null) {
-    	parent::__construct($id, $table, $ds);
-	    $this->virtualFields['subject'] = sprintf('CONCAT(%s.title)', $this->alias);
 		
 		if (in_array('Activities', CakePlugin::loaded())) {
 			$this->actsAs['Activities.Loggable'] = array(
@@ -86,6 +84,20 @@ class Message extends MessagesAppModel {
 				'parentForeignKey' => 'foreign_key'
 				);
 		}
+	
+		if (in_array('Tags', CakePlugin::loaded())) {
+			$this->actsAs['Tags.Taggable'] = array('automaticTagging' => true, 'taggedCounter' => true);
+			$this->hasAndBelongsToMany['Tag'] = array(
+            	'className' => 'Tags.Tag',
+	       		'joinTable' => 'tagged',
+	            'foreignKey' => 'foreign_key',
+	            'associationForeignKey' => 'tag_id',
+	    		'conditions' => 'Tagged.model = "Message"',
+	    		// 'unique' => true,
+		        );
+		}
+    	parent::__construct($id, $table, $ds); // where this is matters
+	    $this->virtualFields['subject'] = sprintf('CONCAT(%s.title)', $this->alias);
     }
 	
 	
