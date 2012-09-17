@@ -165,7 +165,7 @@ class Message extends MessagesAppModel {
  *
  * @param {array}
  */
-	private function _cleanData($data) {
+	protected function _cleanData($data) {
 		
 		# add a reader to the serialized readers field
 		if (!empty($data['Message']['readers']) && !empty($data['Message']['reader_id'])) {
@@ -204,7 +204,7 @@ class Message extends MessagesAppModel {
  *
  * @param {array}
  */
-	private function _handleReaders($data) {
+	protected function _handleReaders($data) {
 		$userId = CakeSession::read('Auth.User.id');
 		
 		if (!empty($userId) && !empty($data['Message']['readers'])) {
@@ -218,4 +218,3 @@ class Message extends MessagesAppModel {
 		return 0;
 	}
 }
-?>
