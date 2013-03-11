@@ -57,13 +57,10 @@ class MessagesController extends MessagesAppController {
 					'contain' => array('Recipient', 'Sender' => array('fields' => array('full_name'))));
 				break;
 			};
-			
 		$options['fields'] = array('id', 'subject', 'created', 'body', 'readers');
-		
 		$options = am($options, array('order' => array('Message.created' => 'DESC')));
 		$this->paginate = $options;
 		$allMessages = ZuhaSet::remove($this->paginate(), 'readers');
-		
 		foreach ($allMessages as $message) {
 			if ($message['Message']['is_read'] == 0) {
 				$messages[] = $message;
