@@ -39,17 +39,17 @@ class MessagesController extends MessagesAppController {
 			case 'Inbox':
 				$options = array(
 					'conditions' => array('Message.is_archived <>' => 1),
-					'contain' => array('Sender'));
+					'contain' => array('Sender' => array('fields' => array('full_name'))));
 				break;
 			case 'Archived':
 				$options = array(
 					'conditions' => array('Message.is_archived' => 1),
-					'contain' => array('Sender'));
+					'contain' => array('Sender' => array('fields' => array('full_name'))));
 				break;
 			case 'Sent':
 				$options = array(
 					'conditions' => array('Message.sender_id' => $userId),
-					'contain' => array('Recipient', 'Sender'));
+					'contain' => array('Recipient', 'Sender' => array('fields' => array('full_name'))));
 				break;
 			default : 
 				$options = array(
