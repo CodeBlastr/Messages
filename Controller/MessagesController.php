@@ -308,5 +308,27 @@ class MessagesController extends MessagesAppController {
 		}
 	}
 
+/**
+ * This action returns data for a mini-inbox
+ *
+ */
+	public function inboxElement ($model = null, $foreignKey = null) {
+		// defaults
+		$conditions['Message.is_read'] = 0;
+		
+		// options
+		if ( !empty($model) ) {
+			$conditions['Message.model'] = $model;
+		}
+		if ( !empty($foreignKey) ) {
+			$conditions['Message.foreign_key'] = $foreignKey;
+		}
+
+		return $this->Message->find('threaded', array(
+			'conditions' => $conditions,
+			'contain' => array('Sender' => array('fields' => array('full_name'))),
+			'fields' => array('id', 'sender_id', 'title', 'body', 'subject')
+		));
+	}
+
 }
-?>
