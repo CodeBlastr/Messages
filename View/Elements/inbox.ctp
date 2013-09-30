@@ -15,7 +15,7 @@ if ( !empty($messages) ) {
 			. $this->Html->tag('div',
 				$this->Html->link(
 					'<i class="icon-fullscreen"></i>',
-					array('plugin' => 'messages', 'controller' => 'messages', 'action' => 'view', $message['Message']['id']),
+					array('plugin' => 'messages', 'controller' => 'messages', 'action' => 'read', $message['Message']['id']),
 					array('escape' => false, 'title' => 'view message')
 				)
 				. $this->Html->link(
