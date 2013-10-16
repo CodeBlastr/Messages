@@ -3,7 +3,7 @@ class MessagesController extends MessagesAppController {
 
 	public $name = 'Messages';
 	
-	public $uses = 'Messages.Message';
+	public $uses = array('Messages.Message');
 	
 	public $allowedActions = array('count');
 	
