@@ -1,4 +1,4 @@
-<?php if(isset($userId) && !empty($userId)) : ?>
+<?php if(isset($userId) && !empty($userId)): ?>
 <?php $this->Html->script('plugins/jquery.form.min.js', array('inline' => false)); ?>
 <?php 
 	$form = $this->Form->create($userId.'Message', array('id' => $userId.'SendMessage', 'url' => '/messages/messages/send'))

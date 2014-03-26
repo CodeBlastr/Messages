@@ -73,7 +73,19 @@ class MessagesController extends MessagesAppController {
 		$this->set('currentBox' , $box);
 		$this->set('pageActions', false);
 	}
-	
+
+/**
+ * Compose message
+ * 
+ */
+ 	public function add() {
+ 		if ($this->request->is('post')) {
+ 			debug($this->request->data);
+			exit;
+ 		}
+		// get a list of people we can send to
+		$this->set('users', $this->Message->User->find('list')); 
+ 	}
 	
 /**
  * Sends a message to the specified user
@@ -82,7 +94,7 @@ class MessagesController extends MessagesAppController {
  * @return move this Usable Behavior related stuff to the model.
  */
 	public function send($recipientId = null) {
-		# data submitted save and send notification
+		// data submitted save and send notification
 		if (!empty($this->request->data)) {	
 			if ($this->_prepareMessage()) {
 				$this->Session->setFlash(__('Message saved.'));
@@ -92,7 +104,7 @@ class MessagesController extends MessagesAppController {
 			}
 		}
 		
-		# display send page
+		// display send page
 		if (!empty($recipientId)) {
 			$this->request->data['User']['User'] = $recipientId;
 			$this->set('users', $this->Message->User->find('list', array('conditions' => array('User.id' => $recipientId))));	
@@ -110,7 +122,7 @@ class MessagesController extends MessagesAppController {
  * @return move this Usable Behavior related stuff to the model.
  */
 	public function reply($parentId = null) {
-		# data submitted save and send notification
+		// data submitted save and send notification
 		if (!empty($this->request->data)) {	
 			if ($this->_prepareMessage()) {
 				$this->Session->setFlash(__('Message saved.'));
@@ -120,7 +132,7 @@ class MessagesController extends MessagesAppController {
 			}
 		}
 		
-		# display send page
+		// display send page
 		if (!empty($parentId)) {
 			$message = $this->Message->find('first', array(
 				'conditions' => array(
@@ -152,7 +164,7 @@ class MessagesController extends MessagesAppController {
  * Get the body of the message setup, and then send it out.
  */
 	private function _prepareMessage() {
-		# find the users from the habtm users array
+		// find the users from the habtm users array
 		if (!empty($this->request->data['User']['User'])) {
 			$recipients = $this->Message->Recipient->find('all', array(
 				'conditions' => array(
@@ -161,11 +173,11 @@ class MessagesController extends MessagesAppController {
 				));
 		}
 		
-		# add the sender into the users array so that they receive comments and/or view the message at all
+		// add the sender into the users array so that they receive comments and/or view the message at all
 		$this->request->data['User']['User'][] = $this->request->data['Message']['sender_id'];
 		$this->request->data['User']['User'] = array_unique($this->request->data['User']['User']);
 		if ($this->Message->save($this->request->data)) {
-			# send the message via email
+			// send the message via email
 			if (!empty($recipients)) { 
 				foreach ($recipients as $recipient) {
 					$viewUrl = str_replace('{messageId}', $this->Message->id, 'http://'.$_SERVER['HTTP_HOST'].$this->request->data['Message']['viewPath']);

@@ -1,31 +1,46 @@
+<div class="col-md-3">
+	<?php echo $this->element('Messages.navigation'); ?>
+</div>
+<div class="col-md-9">
+	<div class="panel panel-primary list-group">
+		<div class="panel-heading">
+			Unread
+		</div>
+		<?php if (!empty($messages)) : unset($message); ?>
+			<?php foreach ($readMessages as $message) : ?>
+			<div class="list-group-item">
+				<?php echo $this->Html->link($message['Message']['title'], array('action' => 'read', $message['Message']['id'])); ?>
+				<span class="badge"><?php echo $this->Html->link('Reply', array('action' => 'reply', $message['Message']['id'])); ?></span>
+				<span class="badge"><?php echo $this->Html->link('Mark as Read', array('action' => 'read', $message['Message']['id'])); ?></span>
+				<span class="badge"><?php echo $this->Html->link('Archive', array('action' => 'archive', $message['Message']['id'])); ?></span>
+			</div>
+			<?php endforeach; ?>
+		<?php else : ?>
+			<div class="list-group-item text-center">
+				No unread messages
+			</div>
+		<?php endif; ?>
+		<div class="panel-heading">
+			Read
+		</div>
+		<?php if (!empty($readMessages)) : unset($message); ?>
+			<?php foreach ($readMessages as $message) : ?>
+			<div class="list-group-item">
+				<?php echo $this->Html->link($message['Message']['title'], array('action' => 'read', $message['Message']['id'])); ?>
+				<span class="badge"><?php echo $this->Html->link('Reply', array('action' => 'reply', $message['Message']['id'])); ?></span>
+				<span class="badge"><?php echo $this->Html->link('Mark as Unread', array('action' => 'unread', $message['Message']['id'])); ?></span>
+				<span class="badge"><?php echo $this->Html->link('Archive', array('action' => 'archive', $message['Message']['id'])); ?></span>
+			</div>
+			<?php endforeach; ?>
+		<?php else : ?>
+			<div class="list-group-item text-center">
+				No read messages
+			</div>
+		<?php endif; ?>
+	</div>
+</div>
+
 <?php
-echo __('<h2>%s Messages</h2>', $currentBox); 
-
-if (!empty($messages)) {
-	echo '<h3 class="title">Unread Messages</h2>';
-	echo $this->Element('scaffolds/index', array(
-		'data' => $messages,
-		'actions' => array(
-			$this->Html->link('Reply', array('action' => 'reply', '{id}')),
-			$this->Html->link('Mark as Read', array('action' => 'read', '{id}')),
-			$this->Html->link('Archive', array('action' => 'archive', '{id}')),
-			),
-		));
-}
-
-if (!empty($readMessages)) {
-	echo '<h3 class="title">Read Messages</h2>';
-	echo $this->Element('scaffolds/index', array(
-		'data' => $readMessages,
-		'actions' => array(
-			$this->Html->link('Reply', array('action' => 'reply', '{id}')),
-			$this->Html->link('Mark as Unread', array('action' => 'unread', '{id}')),
-			$this->Html->link('Archive', array('action' => 'archive', '{id}')),
-			),
-		));
-}
-
-
 // set the contextual menu items
 $this->set('context_menu', array('menus' => array(
 	array(
@@ -37,4 +52,3 @@ $this->set('context_menu', array('menus' => array(
 			)
 		),
 	)));
-echo $this->element('context_menu'); ?>
