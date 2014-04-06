@@ -8,15 +8,15 @@
 		</div>
 		<?php if (!empty($messages)) : unset($message); ?>
 			<?php foreach ($readMessages as $message) : ?>
-			<div class="list-group-item">
-				<?php echo $this->Html->link($message['Message']['title'], array('action' => 'read', $message['Message']['id'])); ?>
+			<div class="list-group-item clearfix">
+				<?php echo $this->Html->link($message['Message']['subject'], array('action' => 'read', $message['Message']['id'])); ?>
 				<span class="badge"><?php echo $this->Html->link('Reply', array('action' => 'reply', $message['Message']['id'])); ?></span>
 				<span class="badge"><?php echo $this->Html->link('Mark as Read', array('action' => 'read', $message['Message']['id'])); ?></span>
 				<span class="badge"><?php echo $this->Html->link('Archive', array('action' => 'archive', $message['Message']['id'])); ?></span>
 			</div>
 			<?php endforeach; ?>
 		<?php else : ?>
-			<div class="list-group-item text-center">
+			<div class="list-group-item text-center clearfix">
 				No unread messages
 			</div>
 		<?php endif; ?>
@@ -25,15 +25,15 @@
 		</div>
 		<?php if (!empty($readMessages)) : unset($message); ?>
 			<?php foreach ($readMessages as $message) : ?>
-			<div class="list-group-item">
-				<?php echo $this->Html->link($message['Message']['title'], array('action' => 'read', $message['Message']['id'])); ?>
+			<div class="list-group-item clearfix">
+				<?php echo $this->Html->link($message['Message']['subject'], array('action' => 'read', $message['Message']['id'])); ?>
 				<span class="badge"><?php echo $this->Html->link('Reply', array('action' => 'reply', $message['Message']['id'])); ?></span>
 				<span class="badge"><?php echo $this->Html->link('Mark as Unread', array('action' => 'unread', $message['Message']['id'])); ?></span>
 				<span class="badge"><?php echo $this->Html->link('Archive', array('action' => 'archive', $message['Message']['id'])); ?></span>
 			</div>
 			<?php endforeach; ?>
 		<?php else : ?>
-			<div class="list-group-item text-center">
+			<div class="list-group-item text-center clearfix">
 				No read messages
 			</div>
 		<?php endif; ?>
