@@ -7,7 +7,7 @@
 			Unread
 		</div>
 		<?php if (!empty($messages)) : unset($message); ?>
-			<?php foreach ($readMessages as $message) : ?>
+			<?php foreach ($messages as $message) : ?>
 			<div class="list-group-item clearfix">
 				<?php echo $this->Html->link($message['Message']['subject'], array('action' => 'read', $message['Message']['id'])); ?>
 				<span class="badge"><?php echo $this->Html->link('Reply', array('action' => 'reply', $message['Message']['id'])); ?></span>
