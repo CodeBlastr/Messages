@@ -1,5 +1,7 @@
 <?php
-class MessagesController extends MessagesAppController {
+App::uses('MessagesAppController', 'Messages.Controller');
+
+class AppMessagesController extends MessagesAppController {
 
 	public $name = 'Messages';
 	
@@ -52,8 +54,9 @@ class MessagesController extends MessagesAppController {
 /**
  * Compose message
  * 
+ * @param uuid
  */
- 	public function add() {
+ 	public function add($userId = null) {
  		if ($this->request->is('post')) {
  			if ($this->Message->saveAll($this->request->data)) {
  				$this->Session->setFlash(__('Message sent'));
@@ -64,7 +67,12 @@ class MessagesController extends MessagesAppController {
  			}
  		}
 		// get a list of people we can send to
-		$this->set('recipients', $this->Message->User->find('list')); 
+		if ($userId) {
+			$this->set('recipients', $this->Message->User->find('list', array('conditions' => array('User.id' => $userId)))); 
+		} else {
+			$this->set('recipients', $this->Message->User->find('list')); 
+		}
+		
  	}	
 	
 /**
@@ -101,9 +109,7 @@ class MessagesController extends MessagesAppController {
 			));
 		if ($this->Message->readMessage($message['Message']['id'], $this->Session->read('Auth.User.id'))) {
 			$users = Set::combine($message['User'], '{n}.id', array('{0} ({1})', '{n}.full_name', '{n}.username'));
-			debug($users);
-			exit;
-			$message['Recipient'] = $users;
+			$this->set('recipients', $users); 
 			$this->request->data['User']['User'] = Set::extract('/User/id', $message);
 			$this->set(compact('users', 'message'));
 		} else {
@@ -201,6 +207,13 @@ class MessagesController extends MessagesAppController {
 		}
 		$this->Session->setFlash(__('User message was not deleted', true));
 		$this->redirect($this->referer());
+	}
+
+}
+
+
+if (!isset($refuseInit)) {
+	class MessagesController extends AppMessagesController {
 	}
 
 }
