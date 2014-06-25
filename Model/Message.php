@@ -1,6 +1,6 @@
 <?php
 
-class Message extends MessagesAppModel {
+class AppMessage extends MessagesAppModel {
 
 	public $name = 'Message';
 
@@ -248,4 +248,7 @@ class Message extends MessagesAppModel {
 		return $data;
 	}
 
+}
+if (!isset($refuseInit)) {
+    class Message extends AppMessage {}
 }

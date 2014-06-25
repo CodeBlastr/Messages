@@ -91,7 +91,7 @@ class AppMessagesController extends MessagesAppController {
 		if ($this->request->is('post') || $this->request->is('put')) {	
 			if ($this->Message->saveAll($this->request->data)) {
 				$this->Session->setFlash(__('Message sent'));
-				$this->redirect(array('action' => 'index'), 'success');
+				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The message could not be sent. Please, try again.', true), 'error');
 			}
@@ -107,6 +107,7 @@ class AppMessagesController extends MessagesAppController {
 				'User'
 				),
 			));
+
 		if ($this->Message->readMessage($message['Message']['id'], $this->Session->read('Auth.User.id'))) {
 			$users = Set::combine($message['User'], '{n}.id', array('{0} ({1})', '{n}.full_name', '{n}.username'));
 			$this->set('recipients', $users); 
