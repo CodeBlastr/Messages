@@ -60,4 +60,14 @@ class MessagesUser extends MessagesAppModel {
 		return $this->save($message, array('callbacks' => false)); 		
  	}
 
+
+    public function newMessageCount($userId){
+        return $this->find('count',array(
+            'MessagesUser.user_id' => $userId,
+            'label' =>'unread',
+        ));
+
+
+    }
+
 }
