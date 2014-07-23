@@ -5,7 +5,7 @@
         <ul class="metaData">
           <li><span class="metaDataLabel">
             <?php echo __('Subject: '); ?>
-            </span><span class="metaDataDetail"><?php echo $message['Message']['title']; ?></span></li>
+            </span><span class="metaDataDetail"><?php echo $message['Message']['subject']; ?></span></li>
           <li><span class="metaDataLabel">
             <?php echo __('From: '); ?>
             </span><span class="metaDataDetail"><?php echo $message['Sender']['full_name'] . ' ('.$message['Sender']['username'].')'; ?></span></li>
@@ -33,7 +33,7 @@
     <fieldset>
       <legend class="toggleClick"><?php echo __('Reply'); ?></legend>
       <?php
-	  echo $this->Form->input('Message.title', array('label' => __('Subject'), 'value' => 'Re: '.$message['Message']['title']));
+	  echo $this->Form->input('Message.subject', array('label' => __('Subject'), 'value' => 'Re: '.$message['Message']['subject']));
 	  echo $this->Form->input('Message.body', array('label' => '', 'type' => 'richtext', 'ckeSettings' => array('buttons' => array('Bold','Italic','Underline','FontSize','TextColor','BGColor','-','NumberedList','BulletedList','Blockquote','JustifyLeft','JustifyCenter','JustifyRight'))));
 	  echo $this->Form->input('User', array('multiple' => 'checkbox', 'label' => 'Recipients'));
 	  
