@@ -104,7 +104,7 @@ class AppMessage extends MessagesAppModel {
 					$viewUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/messages';
 					$message = $this->data['Message']['body'];
 					$message .= '<p>You can reply to this message here: <br><a href="' . $viewUrl . '">' . $viewUrl . '</a></p>';
-					$this->__sendMail($email, $this->data['Message']['subject'], $message, $template = 'default');
+					//$this->__sendMail($email, $this->data['Message']['subject'], $message, $template = 'default');
 				}
 			} else {
 				// creating a message but it's not getting sent to anyone.  Maybe, just deal with it here.
