@@ -2,4 +2,3 @@
 class MessagesAppModel extends AppModel {
 
 }
-?>
