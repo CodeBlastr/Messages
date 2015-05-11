@@ -26,7 +26,7 @@
 		<?php if (!empty($readMessages)) : unset($message); ?>
 			<?php foreach ($readMessages as $message) : ?>
 			<div class="list-group-item clearfix">
-				<?php echo $this->Html->link($message['Message']['subject'], array('action' => 'read', $message['Message']['id'])); ?>
+				<?php echo $this->Html->link($message['Message']['subject'], array('action' => 'reply', $message['Message']['id'])); ?>
 				<span class="badge"><?php echo $this->Html->link('Reply', array('action' => 'reply', $message['Message']['id'])); ?></span>
 				<span class="badge"><?php echo $this->Html->link('Mark as Unread', array('action' => 'unread', $message['Message']['id'])); ?></span>
 				<span class="badge"><?php echo $this->Html->link('Archive', array('action' => 'archive', $message['Message']['id'])); ?></span>
