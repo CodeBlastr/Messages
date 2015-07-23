@@ -107,9 +107,9 @@ class AppMessage extends MessagesAppModel {
 					//$this->__sendMail($email, $this->data['Message']['subject'], $message, $template = 'default');
 				}
 			} else {
-				// creating a message but it's not getting sent to anyone.  Maybe, just deal with it here.
-				debug($this->data);
-				exit;
+				// creating a message but it's not getting sent to anyone.  Should probably deal with it earlier than this.
+				// debug($this->data);
+				// exit;
 			}
 		}
 	}
@@ -140,15 +140,21 @@ class AppMessage extends MessagesAppModel {
  		$label = !empty($options['label']) ? $options['label'] : 'read'; // default find by label
 		$userId = $options['userId'];
 		$archived = $options['archived'];
+		$creator= $options['creator']; // the id of the creator/sender you want to find message by
 		unset($options['label']);
 		unset($options['userId']);
 		unset($options['archived']);
+		unset($options['creator']);
 		$conditions = array();
 		// remove archived unless you specifically asked for archived
 		if (!empty($archived)) {
 			$conditions = array('MessagesUser.is_archived' => 1);
 		} else {
 			$conditions = array('MessagesUser.is_archived' => 0);
+		}
+		// only get ones you've created if specified (eg. you're the sender)..
+		if (!empty($created)) {
+			$conditions = array('Message.creator_id' => $created);
 		}
 		
 		if (!empty($label) && !empty($userId)) {

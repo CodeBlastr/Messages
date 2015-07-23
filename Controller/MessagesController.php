@@ -29,8 +29,8 @@ class AppMessagesController extends MessagesAppController {
  * Inbox method
  */
  	private function _indexInbox() {
- 		$readMessages = $this->Message->findbyLabel('all', array('label' => 'read', 'userId' => $this->Session->read('Auth.User.id')));
-		$messages =  $this->Message->findbyLabel('all', array('contain' => array('User', 'Sender'), 'label' => 'unread', 'userId' => $this->Session->read('Auth.User.id')));
+ 		$readMessages = $this->Message->findbyLabel('all', array('contain' => array('User', 'Sender'), 'label' => 'read', 'userId' => $this->Session->read('Auth.User.id'), 'creator' => $this->Session->read('Auth.User.id')));
+		$messages =  $this->Message->findbyLabel('all', array('contain' => array('User', 'Sender'), 'label' => 'unread', 'userId' => $this->Session->read('Auth.User.id'), 'creator' => $this->Session->read('Auth.User.id')));
 		$this->set(compact('messages', 'readMessages'));
  	}
 
